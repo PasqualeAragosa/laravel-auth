@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin; //ho spostato il controller
 
+use App\Http\Controllers\Controller;
+use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use App\Models\Project;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -15,7 +17,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::orderByDesc('id')->get();
+        //dd($projects);
+        return view('admin.projects.index', compact('projects'));
     }
 
     /**
@@ -25,7 +29,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -36,7 +40,15 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $validated_data = $request->validated();
+
+        //project slug
+        $project_slug = Project::createSlug($validated_data['title']);
+
+        $validated_data['slug'] = $project_slug;
+        Project::create($validated_data);
+
+        return to_route('admin.projects.index')->with('message', 'New Project added');
     }
 
     /**
@@ -47,7 +59,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
@@ -58,7 +70,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -70,7 +82,15 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $validated_data = $request->validated();
+
+        //project slug
+        $project_slug = Project::createSlug($validated_data['title']);
+
+        $validated_data['slug'] = $project_slug;
+        $project->update($validated_data);
+
+        return to_route('admin.projects.index')->with('message', " Project $project->title modified");
     }
 
     /**
@@ -81,6 +101,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return to_route('admin.projects.index')->with('message', " Project $project->title deleted");
     }
 }

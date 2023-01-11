@@ -8,9 +8,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel Portfolio') }}</title>
 
-    <!-- Fontawesome -->
+    <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Fonts -->
@@ -25,17 +25,16 @@
     <div id="app">
 
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">PORTFOLIO</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <ul class="navbar-nav ml-auto">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Laravel Boolfolio</a>
+
+            <!-- sostituito la searchbar -->
+            <ul class="navbar-nav ml-auto pe-4">
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }}
                     </a>
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('admin') }}">{{__('Dashboard')}}</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -45,7 +44,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-                    </div>
+                    </ul>
                 </li>
             </ul>
         </header>
@@ -53,23 +52,22 @@
         <div class="container-fluid">
             <div class="row">
                 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                    <div class="position-sticky pt-3 sidebar-sticky">
+                    <div class=" pt-3 sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.dashboard' ? 'active' : ''}}" aria-current="page" href="{{route('admin.dashboard')}}">
                                     <span data-feather="home" class="align-text-bottom"></span>
-                                    <i class="fas fa-tachometer-alt fa-sm fa-fw"></i>
+                                    <i class="fa-solid fa-clipboard-list"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link {{Route::currentRouteName() === 'admin.projects.index' ? 'active' : ''}}" href="{{route('admin.projects.index')}}">
                                     <span data-feather="file" class="align-text-bottom"></span>
-                                    <i class="fas fa-pencil fa-sm fa-fw "></i>
-                                    Posts
+                                    <i class="fa-solid fa-pencil"></i>
+                                    Projects
                                 </a>
                             </li>
-
                         </ul>
                     </div>
                 </nav>
@@ -79,6 +77,7 @@
                 </main>
             </div>
         </div>
+
     </div>
 </body>
 
