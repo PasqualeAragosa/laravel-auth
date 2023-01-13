@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin; //ho spostato il controller
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -18,7 +19,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::orderByDesc('id')->get();
-        //dd($projects);
+
         return view('admin.projects.index', compact('projects'));
     }
 
@@ -42,14 +43,22 @@ class ProjectController extends Controller
     {
         $validated_data = $request->validated();
 
+        if ($request->hasFile('cover_image')) {
+            $cover_image = Storage::put('uploads', $validated_data['cover_imge']);
+
+            $validated_data['cover_image'] = $cover_image;
+        }
+
+
         //project slug
         $project_slug = Project::createSlug($validated_data['title']);
 
         $validated_data['slug'] = $project_slug;
         Project::create($validated_data);
 
-        return to_route('admin.projects.index')->with('message', 'New Project added');
+        return to_route('admin.projects.index')->with('message', 'Succesfully new Project added');
     }
+
 
     /**
      * Display the specified resource.
@@ -84,13 +93,21 @@ class ProjectController extends Controller
     {
         $validated_data = $request->validated();
 
-        //project slug
+        if ($request->hasFile('cover_image')) {
+            if ($project->cover_image) {
+                Storage::delete($project->cover_image);
+            }
+            $cover_image = Storage::put('uploads', $validated_data['cover_image']);
+
+            $validated_data['cover_image'] = $cover_image;
+        }
+
         $project_slug = Project::createSlug($validated_data['title']);
 
         $validated_data['slug'] = $project_slug;
         $project->update($validated_data);
 
-        return to_route('admin.projects.index')->with('message', " Project $project->title modified");
+        return to_route('admin.projects.index')->with('message', "Chages$project->title project");
     }
 
     /**

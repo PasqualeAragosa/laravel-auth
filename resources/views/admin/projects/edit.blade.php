@@ -8,7 +8,7 @@
 </div>
 
 @include('partials.errors')
-<form action="{{route('admin.projects.update', $project->slug)}}" method="post">
+<form action="{{route('admin.projects.update', $project->slug)}}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -27,6 +27,16 @@
         <small id="helpId" class="text-muted">Required field</small>
     </div>
     @error('slug')
+    <div class="alert alert-danger">{{$message}}</div>
+    @enderror
+
+    <div class="mb-3">
+        <img class="edit_form_img" src="{{asset('storage/' . $project->cover_image)}}" alt="">
+        <label for="cover_image" class="form-label">Edit cover image</label>
+        <input type="file" name="cover_image" id="cover_image" class="form-control @error('cover_image') is-invalid @enderror" placeholder="" aria-describedby="helpId">
+        <small id="helpId" class="text-muted">Edit cover image</small>
+    </div>
+    @error('cover_image')
     <div class="alert alert-danger">{{$message}}</div>
     @enderror
 

@@ -35,6 +35,7 @@
                 <td scope="row">{{$project->id}}</td>
                 <td>{{$project->title}}</td>
                 <td>{{$project->slug}}</td>
+                <td><img class="edit_form_img" src="{{asset('storage/' . $project->cover_image)}}" alt="{{$project->title}}"></td>
                 <!-- <td>{{$project->description}}</td> -->
                 <td>
                     <a class="btn btn-primary" href="{{route('admin.projects.show', $project->slug)}}"><i class="fa-solid fa-eye"></i></a>
